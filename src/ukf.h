@@ -70,6 +70,11 @@ public:
   //create matrix with predicted sigma points as columns
   MatrixXd Xsig_pred;
 
+  //NIS for Radar
+  double  NIS_radar_;
+
+  // NIS for Laser
+  double  NIS_laser_;
 
   /**
    * Constructor
