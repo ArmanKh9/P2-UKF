@@ -131,9 +131,9 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
           /**
           Convert radar from polar to cartesian coordinates and initialize state.
           */
-          float ro = measurement_pack.raw_measurements_[0];
-          float phi = measurement_pack.raw_measurements_[1];
-          float ro_dot = measurement_pack.raw_measurements_[2];
+          float ro = meas_package.raw_measurements_[0];
+          float phi = meas_package.raw_measurements_[1];
+          float ro_dot = meas_package.raw_measurements_[2];
 
           x_(0) = ro * cos(phi);
           x_(1) = ro * sin(phi);
@@ -146,7 +146,7 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
           /**
           Initialize state.
           */
-          x_ << measurement_pack.raw_measurements_(0), measurement_pack.raw_measurements_(1), 0, 0, 0;
+          x_ << meas_package.raw_measurements_(0), meas_package.raw_measurements_(1), 0, 0, 0;
         }
 
         //meas_package.raw_measurements_
@@ -374,9 +374,11 @@ void UKF::UpdateLidar(MeasurementPackage meas_package) {
   //add measurement noise covariance matrix
   MatrixXd R = MatrixXd(n_z,n_z);
 
+  //Noise Covariance matrix
   R <<    std_laspx_*std_laspx_, 0,
           0, std_laspy_*std_laspy_;
 
+  //Add noise
   S = S + R;
 
   /*****************************************************
@@ -490,11 +492,12 @@ void UKF::UpdateRadar(MeasurementPackage meas_package) {
   //add measurement noise covariance matrix
   MatrixXd R = MatrixXd(n_z,n_z);
 
+  //Noise covariance matrix
   R <<    std_radr_*std_radr_, 0, 0,
           0, std_radphi_*std_radphi_, 0,
           0, 0,std_radrd_*std_radrd_;
 
-
+  // Add noise
   S = S + R;
 
   /*****************************************************
