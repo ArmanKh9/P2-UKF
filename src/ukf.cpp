@@ -56,6 +56,14 @@ UKF::UKF() {
 
   is_initialized_ = false;
 
+  time_us_ = 0;
+
+  n_x_ = 5;
+
+  n_aug_ = 7;
+
+  lambda_ = 3 - n_aug_;
+
   // initialize predicted sigma point matrix
   MatrixXd Xsig_pred_ = MatrixXd(n_x_, 2 * n_aug_ + 1);
 
@@ -72,14 +80,6 @@ UKF::UKF() {
 
     weights_(i) = weight;
   }
-
-  time_us_ = 0;
-
-  n_x_ = 5;
-
-  n_aug_ = 7;
-
-  lambda_ = 3 - n_aug_;
 
   //create matrix with predicted sigma points as columns
   Xsig_pred_ = MatrixXd(n_x_, 2 * n_aug_ + 1);
