@@ -67,6 +67,9 @@ public:
   ///* Sigma point spreading parameter
   double lambda_;
 
+  //create matrix with predicted sigma points as columns
+  MatrixXd Xsig_pred;
+
 
   /**
    * Constructor
