@@ -210,6 +210,7 @@ void UKF::Prediction(double delta_t) {
     Xsig.col(i+1+n_x_) = x_ - sqrt(lambda_+n_x_) * A.col(i);
   }
 
+  lambda_ = 3 - n_aug_;
   //create augmented mean state
   x_aug.head(5) = x_;
   x_aug(5) = 0;
@@ -226,6 +227,7 @@ void UKF::Prediction(double delta_t) {
 
   //create augmented sigma points
   Xsig_aug.col(0)  = x_aug;
+
 
   for (int i = 0; i< n_aug_; i++){
     Xsig_aug.col(i+1)       = x_aug + sqrt(lambda_+n_aug_) * L.col(i);
@@ -304,8 +306,8 @@ void UKF::Prediction(double delta_t) {
    VectorXd x_diff = Xsig_pred_.col(i) - x_;
 
    //angle normalization
-   while (x_diff(3)> M_PI) x_diff(3)-=2.*M_PI;
-   while (x_diff(3)<-M_PI) x_diff(3)+=2.*M_PI;
+   while (x_diff(3)> M_PI) x_diff(3) -= 2.*M_PI;
+   while (x_diff(3)<-M_PI) x_diff(3) += 2.*M_PI;
 
    P_ = P_ + weights_(i) * x_diff * x_diff.transpose();
   }
