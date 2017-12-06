@@ -65,12 +65,9 @@ UKF::UKF() {
   lambda_ = 3 - n_x_;
 
   //Weights
-  VectorXd weights_ = VectorXd(2*n_aug_ + 1);
+  weights_ = VectorXd(2*n_aug_ + 1);
 
   // initialize predicted sigma point matrix
-  MatrixXd Xsig_pred_ = MatrixXd(n_x_, 2 * n_aug_ + 1);
-
-  //create matrix with predicted sigma points as columns
   Xsig_pred_ = MatrixXd(n_x_, 2 * n_aug_ + 1);
 
   // Initialize NIS for Radar
