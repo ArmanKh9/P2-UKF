@@ -62,24 +62,13 @@ UKF::UKF() {
 
   n_aug_ = 7;
 
-  lambda_ = 3 - n_aug_;
+  lambda_ = 3 - n_x_;
+
+  //Weights
+  VectorXd weights_ = VectorXd(2*n_aug_ + 1);
 
   // initialize predicted sigma point matrix
   MatrixXd Xsig_pred_ = MatrixXd(n_x_, 2 * n_aug_ + 1);
-
-  // weights_
-  VectorXd weights_ = VectorXd(2*n_aug_ + 1);
-
-  double weight_0 = lambda_/(lambda_ + n_aug_);
-
-  weights_(0) = weight_0;
-
-  for (int i = 1; i < 2 * n_aug_ + 1; i++) {
-
-    double weight = 0.5 / (n_aug_ + lambda_);
-
-    weights_(i) = weight;
-  }
 
   //create matrix with predicted sigma points as columns
   Xsig_pred_ = MatrixXd(n_x_, 2 * n_aug_ + 1);
@@ -116,7 +105,6 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
           * Create the covariance matrix.
           **/
         // first measurement
-        cout << "UKF: " << endl;
         x_ << 1, 1, 1, 1, 1;
 
         // initialize state covariance matrix P_
@@ -125,6 +113,8 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
               0, 0, 1, 0, 0,
               0, 0, 0, 1, 0,
               0, 0, 0, 0, 1;
+
+        time_us_ = meas_package.timestamp_;
 
         if (meas_package.sensor_type_ == MeasurementPackage::RADAR) {
           /**
@@ -153,9 +143,8 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
         // done initializing, no need to predict or update
         is_initialized_ = true;
 
-        time_us_ = meas_package.timestamp_;
 
-      return;
+        return;
       }
 
 
@@ -201,11 +190,13 @@ void UKF::Prediction(double delta_t) {
   //calculate square root of P
   MatrixXd A = P_.llt().matrixL();
 
+  lambda_ = 3 - n_x_;
+
   //create augmented mean vector
-  VectorXd x_aug = VectorXd(7);
+  VectorXd x_aug = VectorXd(n_aug_);
 
   //create augmented state covariance
-  MatrixXd P_aug = MatrixXd(7, 7);
+  MatrixXd P_aug = MatrixXd(n_aug_, n_aug_);
 
   //create sigma point matrix
   MatrixXd Xsig_aug = MatrixXd(n_aug_, 2 * n_aug_ + 1);
@@ -290,9 +281,18 @@ void UKF::Prediction(double delta_t) {
     State Mean and Covariance of Predicted Sigma Points
   ******************************************************/
 
+  // weights_
+
+  double weight_0 = lambda_/(lambda_ + n_aug_);
+
+  weights_(0) = weight_0;
+  for (int i = 1; i < 2 * n_aug_ + 1; i++) {
+    double weight = 0.5 / (n_aug_ + lambda_);
+    weights_(i) = weight;
+  }
+
   //predicted state mean
   x_.fill(0.0);
-
   for (int i = 0; i < 2 * n_aug_ + 1; i++) {  //iterate over sigma points
    x_ = x_ + weights_(i) * Xsig_pred_.col(i);
   }
