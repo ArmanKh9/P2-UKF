@@ -102,11 +102,11 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
           * Create the covariance matrix.
           **/
         // first measurement
-        x_ << 1, 1, 1, 1, 1;
+        x_ << 0.6, 0.6, 5, 1, 0.1;
 
         // initialize state covariance matrix P_
-        P_ << 1, 0, 0, 0, 0,
-              0, 1, 0, 0, 0,
+        P_ << 0.04, 0, 0, 0, 0,
+              0, 0.04, 0, 0, 0,
               0, 0, 1, 0, 0,
               0, 0, 0, 1, 0,
               0, 0, 0, 0, 1;
