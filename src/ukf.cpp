@@ -266,6 +266,8 @@ void UKF::Prediction(double delta_t) {
     py_p = py_p + 0.5*nu_a*delta_t*delta_t * sin(yaw);
     v_p = v_p + nu_a*delta_t;
     yaw_p = yaw_p + 0.5*nu_yawdd*delta_t*delta_t;
+    while (yaw_p> M_PI) yaw_p -= 2.*M_PI;
+    while (yaw_p<-M_PI) yaw_p += 2.*M_PI;
     yawd_p = yawd_p + nu_yawdd*delta_t;
 
     //write predicted sigma point into right column
@@ -275,11 +277,12 @@ void UKF::Prediction(double delta_t) {
     Xsig_pred_(3,i) = yaw_p;
     Xsig_pred_(4,i) = yawd_p;
   }
-  // print predicted sigma Points
-  cout<<"predicted sigma points"<<"\n"<< Xsig_pred_;
+  
+  // print predicted sigma points
+  cout<<"predicted sigma points"<<"\n"<< Xsig_pred_<<endl;
 
   /*****************************************************
-    State Mean and Covariance of Predicted Sigma Points
+    State Mean and Covariance yof Predicted Sigma Points
   ******************************************************/
 
   // weights_
