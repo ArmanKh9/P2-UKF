@@ -24,10 +24,10 @@ UKF::UKF() {
   P_ = MatrixXd(5, 5);
 
   // Process noise standard deviation longitudinal acceleration in m/s^2
-  std_a_ = 2;
+  std_a_ = 0.4;
 
   // Process noise standard deviation yaw acceleration in rad/s^2
-  std_yawdd_ = 0.3;
+  std_yawdd_ = 0.2;
 
   // Laser measurement noise standard deviation position1 in m
   std_laspx_ = 0.15;
@@ -265,12 +265,6 @@ void UKF::Prediction(double delta_t) {
     py_p = py_p + 0.5*nu_a*delta_t*delta_t * sin(yaw);
     v_p = v_p + nu_a*delta_t;
     yaw_p = yaw_p + 0.5*nu_yawdd*delta_t*delta_t;
-    if (yaw_p > M_PI) {
-      yaw_p = yaw_p - 2*M_PI;
-    }
-    if (yaw_p < -M_PI) {
-      yaw_p = yaw_p + 2*M_PI;
-    }
     yawd_p = yawd_p + nu_yawdd*delta_t;
 
     //write predicted sigma point into right column
