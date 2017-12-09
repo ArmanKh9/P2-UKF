@@ -101,7 +101,7 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
           * Initialize the state x_ with the first measurement.
           * Create the covariance matrix.
           **/
-        // first measurement
+        // first measurement (values based on ground values of first timestep )
         x_ << 1, 1, 5, 0, 0.01;
 
         // initialize state covariance matrix P_
@@ -125,7 +125,7 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
           x_(1) = ro * sin(phi);
           x_(2) = ro_dot;
           x_(3) = atan2(x_(1), x_(0));
-          //x_(4) = ro_dot * (x_(0)*sin(x_(3)) - x_(1)*cos(x_(3)))/(x_(0)*x_(0) + x_(1)*x_(1));
+          x_(4) = ro_dot * (x_(0)*sin(x_(3)) - x_(1)*cos(x_(3)))/(x_(0)*x_(0) + x_(1)*x_(1));
         }
 
         else if (meas_package.sensor_type_ == MeasurementPackage::LASER) {
