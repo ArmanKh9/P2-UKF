@@ -12,10 +12,10 @@ using std::vector;
  */
 UKF::UKF() {
   // if this is false, laser measurements will be ignored (except during init)
-  use_laser_ = true;
+  use_laser_ = false;
 
   // if this is false, radar measurements will be ignored (except during init)
-  use_radar_ = false;
+  use_radar_ = true;
 
   // initial state vector
   x_ = VectorXd(5);
@@ -56,7 +56,7 @@ UKF::UKF() {
 
   is_initialized_ = false;
 
-  time_us_ = 0;
+  time_us_ = 0.0;
 
   n_x_ = 5;
 
@@ -274,9 +274,6 @@ void UKF::Prediction(double delta_t) {
     Xsig_pred_(3,i) = yaw_p;
     Xsig_pred_(4,i) = yawd_p;
   }
-
-  // print predicted sigma points
-  cout<<"predicted sigma points"<<"\n"<< Xsig_pred_<<endl;
 
   /*****************************************************
     State Mean and Covariance of Predicted Sigma Points
