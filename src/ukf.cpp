@@ -124,7 +124,7 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
           x_(0) = ro * cos(phi);
           x_(1) = ro * sin(phi);
           x_(2) = ro_dot;
-          //x_(3) = atan2(x_(1), x_(0));
+          x_(3) = atan2(x_(1), x_(0));
           //x_(4) = ro_dot * (x_(0)*sin(x_(3)) - x_(1)*cos(x_(3)))/(x_(0)*x_(0) + x_(1)*x_(1));
         }
 
