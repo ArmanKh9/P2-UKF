@@ -12,7 +12,7 @@ using std::vector;
  */
 UKF::UKF() {
   // if this is false, laser measurements will be ignored (except during init)
-  use_laser_ = false;
+  use_laser_ = true;
 
   // if this is false, radar measurements will be ignored (except during init)
   use_radar_ = true;
@@ -265,8 +265,12 @@ void UKF::Prediction(double delta_t) {
     py_p = py_p + 0.5*nu_a*delta_t*delta_t * sin(yaw);
     v_p = v_p + nu_a*delta_t;
     yaw_p = yaw_p + 0.5*nu_yawdd*delta_t*delta_t;
-    //while (yaw_p> M_PI) yaw_p -= 2.*M_PI;
-    //while (yaw_p<-M_PI) yaw_p += 2.*M_PI;
+    if (yaw_p > M_PI) {
+      yaw_p = yaw_p - 2*M_PI;
+    }
+    if (yaw_p < -M_PI) {
+      yaw_p = yaw_p + 2*M_PI;
+    }
     yawd_p = yawd_p + nu_yawdd*delta_t;
 
     //write predicted sigma point into right column
