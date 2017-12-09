@@ -24,7 +24,7 @@ UKF::UKF() {
   P_ = MatrixXd(5, 5);
 
   // Process noise standard deviation longitudinal acceleration in m/s^2
-  std_a_ = 3;
+  std_a_ = 1;
 
   // Process noise standard deviation yaw acceleration in rad/s^2
   std_yawdd_ = 0.35;
@@ -102,7 +102,7 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
           * Create the covariance matrix.
           **/
         // first measurement
-        x_ << 0.6, 0.6, 5, 1, 0.1;
+        x_ << 1, 1, 5, 0, 0.01;
 
         // initialize state covariance matrix P_
         P_ << 0.04, 0, 0, 0, 0,
