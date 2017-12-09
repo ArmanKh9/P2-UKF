@@ -12,7 +12,7 @@ using std::vector;
  */
 UKF::UKF() {
   // if this is false, laser measurements will be ignored (except during init)
-  use_laser_ = true;
+  use_laser_ = false;
 
   // if this is false, radar measurements will be ignored (except during init)
   use_radar_ = true;
@@ -139,7 +139,6 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
         //meas_package.raw_measurements_
         // done initializing, no need to predict or update
         is_initialized_ = true;
-
 
         return;
       }
@@ -282,7 +281,7 @@ void UKF::Prediction(double delta_t) {
   cout<<"predicted sigma points"<<"\n"<< Xsig_pred_<<endl;
 
   /*****************************************************
-    State Mean and Covariance yof Predicted Sigma Points
+    State Mean and Covariance of Predicted Sigma Points
   ******************************************************/
 
   // weights_
