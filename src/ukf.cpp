@@ -24,7 +24,7 @@ UKF::UKF() {
   P_ = MatrixXd(5, 5);
 
   // Process noise standard deviation longitudinal acceleration in m/s^2
-  std_a_ = 5;
+  std_a_ = 0.2;
 
   // Process noise standard deviation yaw acceleration in rad/s^2
   std_yawdd_ = 5;
@@ -275,6 +275,8 @@ void UKF::Prediction(double delta_t) {
     Xsig_pred_(3,i) = yaw_p;
     Xsig_pred_(4,i) = yawd_p;
   }
+  // print predicted sigma Points
+  cout<<"predicted sigma points"<<"\n"<< Xsig_pred_;
 
   /*****************************************************
     State Mean and Covariance of Predicted Sigma Points
